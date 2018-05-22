@@ -70,6 +70,15 @@ h2::after{
 .box {
   padding: 2px;
 }
+#pong-header{
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+#pong {
+  width: 100%;
+  height: 100%;
+}
 /**********************************************/
                   /* paragrph */
 /**********************************************/
@@ -175,6 +184,7 @@ header {
   display: inline-block;
   margin-left: 55px;
   /* float: right; */
+  font-size: 25px;
 
 }
 
@@ -202,7 +212,10 @@ header {
 .section-features .long-copy {
   margin-bottom: 40px;
 }
-
+/* .section-pong{
+  padding: 0;
+  margin: 0;
+} */
 
 
 

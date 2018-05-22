@@ -3,117 +3,228 @@ class Vec {
     this.x = x;
     this.y = y;
   }
+  get len() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+  set len(value) {
+    const fact = value / this.len;
+    this.x *= fact;
+    this.x *= fact;
+  }
 }
 
 class Rect {
-  constructor(w,h) {
+  constructor(w, h) {
     this.pos = new Vec;
-    this.size = new Vec(w,h)
+    this.size = new Vec(w, h);
   }
-  get left(){
-    return this.pos.x - this.size.x /2;
+  get left() {
+    return this.pos.x - this.size.x / 2;
   }
-  get right(){
-    return this.pos.x + this.size.x /2;
+  get right() {
+    return this.pos.x + this.size.x / 2;
   }
-  get top(){
-    return this.pos.y - this.size.y /2;
+  get top() {
+    return this.pos.y - this.size.y / 2;
   }
-  get bottom(){
-    return this.pos.y + this.size.y /2;
+  get bottom() {
+    return this.pos.y + this.size.y / 2;
   }
 }
 
 class Ball extends Rect {
-  constructor(){
+  constructor() {
     super(10, 10);
-    this.vel = new Vec
+    this.vel = new Vec;
   }
 }
-class Pong{
+
+class Player extends Rect {
+  constructor() {
+    super(20, 100);
+    this.score = 0;
+  }
+}
+
+
+
+class Pong {
   constructor(canvas) {
     this._canvas = canvas;
-    this._context = canvas.getContext("2d");
+    this._context = canvas.getContext('2d');
+    // the ball
     this.ball = new Ball;
-    this.ball.pos.x = 100;
-    this.ball.pos.y = 50;
-    this.ball.vel.x = 100;
-    this.ball.vel.y = 100;
+    // the players
+    this.players = [
+      new Player,
+      new Player,
+    ];
+
+    this.players[0].pos.x = 40;
+    this.players[1].pos.x = this._canvas.width - 40;
+    this.players.forEach(player => {
+      player.pos.y = this._canvas.height / 2;
+    })
+
+
     let lastTime;
     const callback = (millis) => {
-      if (lastTime){
+      if (lastTime) {
         this.update((millis - lastTime) / 1000);
       }
       lastTime = millis;
-      requestAnimationFrame(callBack);
-    }
-    callBack();
+      requestAnimationFrame(callback);
+    };
+    callback();
+    this.CHAR_PIXAL = 10;
+    this.CHARS = [
+      '111101101101111',
+      '010010010010010',
+      '111001111100111',
+      '111001111001111',
+      '101101111001001',
+      '111100111001111',
+      '111100111101111',
+      '111001001001001',
+      '111101111101111',
+      '111101111001111',
+    ].map(str => {
+      const canvas = document.createElement("canvas");
+      canvas.height = this.CHAR_PIXAL * 5;
+      canvas.width = this.CHAR_PIXAL * 3;
+      const context = canvas.getContext("2d");
+      context.fillStyle = "#fff";
+      str.split("").forEach((fill,i) => {
+        if(fill === "1"){
+          context.fillRect((i % 3) * this.CHAR_PIXAL,
+          (i / 3 | 0) * this.CHAR_PIXAL,
+          this.CHAR_PIXAL,
+          this.CHAR_PIXAL);
+        }
+      });
+      return canvas;
+    });
 
+
+
+    this.reset();
   }
-   update(dt){
-    this.ball.pos.x += this.ball.vel.x * dt; // ball movement is relvetive to the time
-    this.ball.pos.y += this.ball.vel.y * dt;
-
-    // allows for ball to bounce on each corner of canvas
-    // x axis
-    if(this.ball.left < 0 || this.ball.right > this._canvas.width){
-      this.ball.vel.x  = -this.ball.vel.x;
+  collide(player, ball) {
+    if (player.left < ball.right && player.right > ball.left &&
+      player.top < ball.bottom && player.bottom > ball.top) {
+      const len = ball.vel.len;
+      ball.vel.x = -ball.vel.x;
+      ball.vel.y += 300 * (Math.random() - .5);
+      ball.vel.len = len * 1.05;
     }
-    // y axis
-    if (this.ball.top < 0 || this.ball.bottom > this._canvas.width){
-        this.ball.vel.y  = -this.ball.vel.y;
-    }
-
+  }
+  draw() {
     this._context.fillStyle = "#000";
     this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
+    this.drawRect(this.ball);
+
+    this.players.forEach(player => this.drawRect(player));
+
+    this.drawScore();
+  }
+  drawRect(rect) {
     this._context.fillStyle = "#fff";
-    this._context.fillRect(this.ball.pos.x, this.ball.pos.y, this.ball.size.x, this.ball.size.y);
+    this._context.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
+
+  }
+  drawScore() {
+    const align = this._canvas.width / 3;
+    const CHAR_W = this.CHAR_PIXAL * 4;
+    this.players.forEach((player,index) => {
+      const chars = player.score.toString().split("");
+      const offset = align *
+      (index +1) - (CHAR_W * chars.length / 2) + this.CHAR_PIXAL / 2;
+      chars.forEach((char, pos) => {
+        this._context.drawImage(this.CHARS[char|0],
+        offset + pos * CHAR_W,20);
+      });
+    });
+  }
+  reset() {
+    this.ball.pos.x = this._canvas.width / 2;
+    this.ball.pos.y = this._canvas.height / 2
+
+    this.ball.vel.x = 0;
+    this.ball.vel.y = 0;
+
+  }
+  start() {
+    if (this.ball.vel.x === 0 && this.ball.vel.y === 0) {
+      this.ball.vel.x = 300 * (Math.random() > .5 ? 1 : -1);
+      this.ball.vel.y = 300 * (Math.random() * 2 - 1);
+      this.ball.vel.len = 700;
+    }
+  }
+
+  update(dt) {
+    this.ball.pos.x += this.ball.vel.x * dt; // movement of the time reltive to time diffrence
+    this.ball.pos.y += this.ball.vel.y * dt;
+
+    if (this.ball.left < 0 || this.ball.right > this._canvas.width) {
+      const playerId = this.ball.vel.x < 0 | 0;
+      this.players[playerId].score++;
+      this.reset();
+      console.log(playerId);
+      this.ball.vel.x = -this.ball.vel.x;
+    }
+    if (this.ball.top < 0 || this.ball.bottom > this._canvas.height) {
+      this.ball.vel.y = -this.ball.vel.y;
+    }
+    this.players[1].pos.y = this.ball.pos.y;
+
+    this.players.forEach(player => this.collide(player, this.ball));
+
+    this.draw();
   }
 
 }
 
 
 const canvas = document.getElementById('pong');
-// const context = canvas.getContext('2d');
-const Pong = new Pong(canvas);
+const pong = new Pong(canvas);
 
-// const ball = new Ball;
-// ball.pos.x = 100;
-// ball.pos.y = 50;
-// console.log(ball);
-// ball.vel.x = 100;
-// ball.vel.y = 100;
+canvas.addEventListener('mousemove', event => {
+  const scale = event.offsetY / event.target.getBoundingClientRect().height;
+  pong.players[0].pos.y = canvas.height * scale;
 
-// let lastTime;
-// function callBack(millis){
-//   if (lastTime){
-//     update((millis - lastTime) / 1000);
-//   }
-//   lastTime = millis;
-//   requestAnimationFrame(callBack);
-// }
+});
+
+canvas.addEventListener('click', event => {
+  pong.start();
+});
 
 
+//resize canvas
+(function() {
+  var
+    htmlCanvas = document.getElementById('c'),
 
-// function update(dt){
-//   ball.pos.x += ball.vel.x * dt; // ball movement is relvetive to the time
-//   ball.pos.y += ball.vel.y * dt;
-//
-//   // allows for ball to bounce on each corner of canvas
-//   // x axis
-//   if(ball.left < 0 || ball.right > canvas.width){
-//     ball.vel.x  = -ball.vel.x;
-//   }
-//   // y axis
-//   if (ball.top < 0 || ball.bottom > canvas.width){
-//       ball.vel.y  = -ball.vel.y;
-//   }
-//
-//   context.fillStyle = "#000";
-//   context.fillRect(0, 0, canvas.width, canvas.height);
-//
-//   context.fillStyle = "#fff";
-//   context.fillRect(ball.pos.x, ball.pos.y, ball.size.x, ball.size.y);
-// }
-// callBack();
+    context = htmlCanvas.getContext('2d');
+
+  initialize();
+
+  function initialize() {
+    window.addEventListener('resize', resizeCanvas, false);
+
+    resizeCanvas();
+  }
+
+  function redraw() {
+    context.strokeStyle = '#1abc9c';
+    context.lineWidth = '5';
+    context.strokeRect(0, 0, window.innerWidth, window.innerHeight);
+  }
+
+  function resizeCanvas() {
+    htmlCanvas.width = window.innerWidth;
+    htmlCanvas.height = window.innerHeight;
+    redraw();
+  }
+
+})();
