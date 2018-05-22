@@ -202,7 +202,7 @@ canvas.addEventListener('click', event => {
 
 //resize canvas
 (function() {
-  var
+  let
     htmlCanvas = document.getElementById('c'),
 
     context = htmlCanvas.getContext('2d');
