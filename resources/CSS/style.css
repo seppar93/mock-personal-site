@@ -108,7 +108,7 @@ h2::after{
 }
 .icon-small {
   font-size: 200%;
-  
+
 
 }
 
@@ -198,6 +198,8 @@ header {
   margin-top: 20px;
 } */
 
+
+
 .main-nav {
   float: right;
   list-style: none;
@@ -229,6 +231,32 @@ header {
 .main-nav li a:active {
   border-bottom: 2px solid #1abc9c;
 }
+
+/**********************************************/
+                  /* sticky nav */
+/**********************************************/
+
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 2px #efefef;
+}
+
+.main-nav {
+  margin-top: 15px;
+  padding-bottom: 10px;
+}
+
+.sticky .main-nav li a:link,
+.sticky .main-nav li a:visited {
+  padding: 9px 0;
+  color: #555;
+
+}
+
 
 /**********************************************/
                   /* features */
