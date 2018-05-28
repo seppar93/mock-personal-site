@@ -2,12 +2,16 @@
 <html lang="en" dir="ltr">
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <meta charset="utf-8">
   <link rel="stylesheet" href="resources/vendor/normlize.css">
   <link rel="stylesheet" href="resources/vendor/Grid.css">
   <link href="https://unpkg.com/ionicons@4.1.1/dist/css/ionicons.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="resources/CSS/style.css">
+  <link rel="stylesheet" href="resources/CSS/queries.css">
+
   <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
   <title> Sepehr Parirokh </title>
 </head>
@@ -20,29 +24,30 @@
 
         <!-- navbar -->
         <ul class="main-nav">
-          <li><a href="#">About Me</a></li>
-          <li><a href="#">Travels</a></li>
-          <li><a href="#">Projects</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a class="js--btn" href="js--btn">About Me</a></li>
+          <li><a class="js--btn" href="js--btn">Travels</a></li>
+          <li><a class="js--btn" href="js--btn">Projects</a></li>
+          <li><a class="js--btn" href="js--btn">Contact</a></li>
           <!-- navbar -->
         </ul>
       </div>
     </nav>
     <div class="hero-text-box">
       <h1> self taught <br> Software engineer</h1>
-      <a class="btn btn-full" href="#">Projects</a>
-      <a class="btn btn-ghost" href="#">About Me</a>
+      <a class="btn btn-full js--btn" href="#">Projects</a>
+      <a class="btn btn-ghost js--btn" href="#">About Me</a>
     </div>
   </header>
   <!-- about me section -->
-  <section class="section-features js--section-features">
+  <section class="section-features js--section">
     <div class="row">
-      <h2 id="here">fill &mdash; out</h2>
+      <h2>fill &mdash; out</h2>
       <p class="long-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a felis dapibus, vulputate sapien id, fringilla quam. Donec porttitor, ligula nec consectetur ullamcorper, magna erat tempus arcu, vel tempus ante tortor in lorem. Integer sollicitudin
         ex ante. Vestibulum ut nunc non nunc bibendum vestibulum. Maecenas sed lacus at orci condimentum pretium et at tortor. Proin eu lacus lacus. Quisque maximus varius tellus sit amet scelerisque. Donec eu dolor arcu. Aliquam aliquet scelerisque nulla,</p>
     </div>
     <div class="row">
       <div class="col span-1-of-4 box">
+
         <!-- from grid css -->
         <i class="icon ion-md-person icon-big"></i>
 
@@ -77,7 +82,7 @@
     </div>
   </section>
 
-  <section class="section-pic">
+  <section class="section-pic js--section">
     <!-- photo dispaly -->
     <ul class="photo-showcase">
       <li>
@@ -123,13 +128,13 @@
     </ul>
   </section>
   <!-- Project pong section -->
-  <section class="section-pong">
+  <section class="section-pong js--section">
     <h2 id="pong-header">Tryout some of my Projects</h2>
     <canvas id="pong" width="1920" height="600"></canvas>
   </section>
 
   <!-- current projects -->
-  <section section-projects>
+  <section class="section-projects js--section">
     <div class="row">
       <h2>Current Projects</h2>
     </div>
@@ -238,8 +243,6 @@
 
 
   </footer>
-
-
 
   <script src="resources/JS/test.js" charset="utf-8"></script>
   <!-- <script src="resources/JS/script.js" charset="utf-8"></script> -->
