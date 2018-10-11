@@ -10,6 +10,7 @@ I wanted to improve my skills on HTML and CSS so I focused on exclusively using 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)]
 
 ## Demonstration
+![](mockSite.gif)
 
 ## Tech/framework used
 
